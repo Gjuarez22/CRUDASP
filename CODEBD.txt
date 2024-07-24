@@ -1,0 +1,73 @@
+
+create database pr1 
+go
+
+ use pr1
+
+create table usuarios
+(
+	id_usuario int identity (1,1) primary key,
+	nombres NVARCHAR(50) NOT NULL,
+    apellidos NVARCHAR(50) NOT NULL,
+    DUI NVARCHAR(10) NOT NULL,
+    Monto DECIMAL(10, 2) NOT NULL,
+    Detalle NVARCHAR(MAX) NOT NULL,
+	id_rol int not null
+)
+
+create table rol(
+	id_rol int identity (1,1) primary key,
+	nombre_rol nvarchar(100) not null
+)
+
+alter table usuarios
+add constraint fk_usuario_rol --nombre a la straing
+foreign key (id_rol)
+references rol(id_rol);
+go
+
+/*create view vw_usuarios
+AS
+select 
+ c.nombre_usuario AS [identificador],
+u.nombres AS [Apodo],
+(select id_rol form rol r where r.id_rol = u.id_rol) AS [rol]
+from usuarios c;
+GO*/
+
+create view vw_usuarios_rol
+AS
+SELECT 
+    c.nombres AS [identificador],
+    (SELECT nombre_rol
+     FROM rol r
+     WHERE r.id_rol = c.id_rol) AS [rol Asignado]
+FROM usuarios c;
+GO
+
+select * from vw_usuarios_rol
+GO
+
+create procedure p_create_usuario2
+(
+@nombre nvarchar(100),
+@rol int = 1)
+AS
+BEGIN
+insert into usuarios(nombres,apellidos,DUI,Monto,Detalle,id_rol)
+values(
+@nombre,
+'apellido',
+'1',
+12.1,
+'detalle',
+@rol
+)
+end;
+
+exec p_create_usuario 'yo'
+
+insert into rol (nombre_rol)
+values('ADMIN')
+
+select * from vw_usuarios
