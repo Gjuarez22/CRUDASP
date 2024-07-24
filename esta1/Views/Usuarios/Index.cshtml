@@ -1,0 +1,24 @@
+﻿@model IEnumerable<esta1.Models.UsuarioViewModel> 
+@{
+    ViewBag.Title = "Index usuarios";
+}
+
+<h2>Lista de usuarios</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>usuario</th>
+            <th>rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nombreUsuario</td>
+                <td>@item.rol</td>
+            </tr>
+        }
+    </tbody>
+</table>
